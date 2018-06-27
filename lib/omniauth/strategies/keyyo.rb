@@ -20,12 +20,15 @@ module OmniAuth
       # additional calls (if the user id is returned with the token
       # or as a URI parameter). This may not be possible with all
       # providers.
-      uid{ raw_info['id'] }
+
+      # uid { raw_info['id'] }
 
       info do
         {
-          name: raw_info['name'],
-          email: raw_info['email']
+          token: raw_info.token,
+          refresh_token: raw_info.refresh_token,
+          expires_at: raw_info.expires_at,
+          expires_in: raw_info.expires_in
         }
       end
 
@@ -40,22 +43,8 @@ module OmniAuth
         options[:callback_url] || (full_host + script_name + callback_path)
       end
 
-      # { "access_token":"<Your access token>","expires_in":3600,"token_type":"bearer","scope":"a.user o.w.voipprofile","refresh_token":"<Your refresh token>" }
-
       def raw_info
-        @raw_info ||= access_token.get('/').parsed
-      end
-
-      def authorize_params
-        super
-      end
-
-      def build_access_token
-        super
-        # session["omniauth.state"] #= params[:state]
-        # verifier = request.params["code"]
-        # state = request.params["state"]
-        # client.auth_code.get_token(verifier, {redirect_uri: callback_url, state: state}.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
+        @raw_info ||= access_token
       end
     end
   end
