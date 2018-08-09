@@ -11,3 +11,5 @@
 .rspec_status
 
  lib/omniauth/strategies/secret.rb
+
+Gemfile.lock
